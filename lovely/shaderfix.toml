@@ -1,0 +1,73 @@
+# Fixes shader compatibility:
+# - Fixes flame shader
+# - Removes noise from CRT shader (incompatible with Pixel devices)
+
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = 'self.SHADERS[shader_name] = love.graphics.newShader("resources/shaders/"..filename)'
+position = "before"
+payload = '''
+if shader_name == "flame" then
+	local code =
+		love.filesystem.read("resources/shaders/"..filename)
+		:gsub(
+			"#endif",
+			"#endif\n#ifdef GL_ES\n\tprecision MY_HIGHP_OR_MEDIUMP float;\n#endif",
+			1
+		)
+		:gsub(
+			"vec4 effect%( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords %)",
+			"mediump vec4 effect%( mediump vec4 colour, Image texture, mediump vec2 texture_coords, mediump vec2 screen_coords %)",
+			1
+		)
+	print(code)
+	G.SHADERS[shader_name] = love.graphics.newShader(code)
+elseif shader_name == "CRT" then
+	local code =
+		love.filesystem.read("resources/shaders/"..filename)
+		:gsub(
+			"#if defined%(VERTEX%) || __VERSION__ > 100 || defined%(GL_FRAGMENT_PRECISION_HIGH%)",
+			"#if defined(VERTEX) || __VERSION__ > 1 || defined(GL_FRAGMENT_PRECISION_HIGH)",
+			1
+		)
+		:gsub(
+			"extern MY_HIGHP_OR_MEDIUMP number noise_fac;",
+			"",
+			1
+		)
+		:gsub(
+			[[//Add in some noise%s*MY_HIGHP_OR_MEDIUMP number x = %(tc%.x %- mod%(tc%.x, 0%.002%)%) %* %(tc%.y %- mod%(tc%.y, 0%.0013%)%) %* time %* 1000%.0;%s*x = mod%( x, 13%.0 %) %* mod%( x, 123%.0 %);%s*MY_HIGHP_OR_MEDIUMP number dx = mod%( x, 0%.11 %)/0%.11;%s*rgb_result = %(1.0%-clamp%( noise_fac%*artifact_amplifier, 0%.0,1%.0 %)%)%*rgb_result %+ dx %* clamp%( noise_fac%*artifact_amplifier, 0%.0,1%.0 %) %* vec3%(1%.0,1%.0,1%.0%);%s%s]],
+			"// Mobile Patch: Noise removed",
+			1
+		)
+	print(code)
+	G.SHADERS[shader_name] = love.graphics.newShader(code)
+else
+'''
+match_indent = false
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = 'self.SHADERS[shader_name] = love.graphics.newShader("resources/shaders/"..filename)'
+position = "after"
+payload = '''
+end
+'''
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "G.SHADERS['CRT']:send('noise_fac',0.001*G.SETTINGS.GRAPHICS.crt/100)"
+position = "at"
+payload = ""
+match_indent = true
+times = 1
