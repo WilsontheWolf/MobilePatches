@@ -17,6 +17,6 @@ times = 1
 target = "main.lua"
 pattern = "local os = love.system.getOS()"
 position = "after"
-payload = "love.window.updateMode(2, 1)"
+payload = "if os == 'Android' or os == 'iOS' then love.window.updateMode(2, 1) end"
 match_indent = true
 times = 1

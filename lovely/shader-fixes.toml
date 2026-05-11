@@ -1,0 +1,77 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = 'self.SHADERS[shader_name] = love.graphics.newShader("resources/shaders/"..filename)'
+position = "before"
+payload = '''
+if shader_name == "flame" or shader_name == "CRT" then
+	local lovely = require"lovely"
+	assert(lovely.apply_patches, "No lovely.apply_patches. Ensure you have a new enough lovely (you can update lmm at lmm.shorty.systems)")
+	local code = assert(lovely.apply_patches(filename, love.filesystem.read("resources/shaders/"..filename)))
+	G.SHADERS[shader_name] = love.graphics.newShader(code)
+else
+'''
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = 'self.SHADERS[shader_name] = love.graphics.newShader("resources/shaders/"..filename)'
+position = "after"
+payload = '''
+end
+'''
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = 'flame.fs'
+pattern = "#endif"
+position = "after"
+payload = """
+#ifdef GL_ES
+    precision MY_HIGHP_OR_MEDIUMP float;
+#endif
+"""
+match_indent = true
+times = 1
+
+
+[[patches]]
+[patches.pattern]
+target = 'flame.fs'
+pattern = 'vec4 effect*'
+position = "at"
+payload = "mediump vec4 effect( mediump vec4 colour, Image texture, mediump vec2 texture_coords, mediump vec2 screen_coords )"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '*noise_fac*'
+position = "at"
+payload = ""
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'CRT.fs'
+pattern = '*noise_fac*'
+position = "at"
+payload = ""
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = '*noise_fac*'
+position = "at"
+payload = ""
+match_indent = true

@@ -1,0 +1,13 @@
+{
+	"id": "MobilePatches",
+	"name": "Mobile Patches",
+	"author": ["WilsontheWolf"],
+	"description": "Fixes for mobile balatro (Unessicary on Steamodded v1.0.0~BETA-1610a and newer)",
+	"prefix": "MobilePatches",
+	"main_file": "main.lua",
+	"priority": 0,
+	"badge_colour": "",
+	"badge_text_colour": "",
+	"version": "1.0.0",
+	"conflicts": [ "Steamodded (>=1.0.0~BETA-1610a)" ]
+}
