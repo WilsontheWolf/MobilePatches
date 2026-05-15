@@ -1,0 +1,11 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = 'G.FPS_CAP = G.FPS_CAP or 500'
+position = "at"
+payload = "G.FPS_CAP = G.FPS_CAP or select(3, love.window.getMode())['refreshrate']"
+match_indent = true
