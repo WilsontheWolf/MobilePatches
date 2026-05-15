@@ -24,3 +24,12 @@ end
 match_indent = true
 times = 1
 
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = "self.F_MOBILE_UI = false"
+position = "at"
+payload = "self.F_MOBILE_UI = true"
+match_indent = true
+times = 1
+
