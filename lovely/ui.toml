@@ -1,0 +1,82 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '{n=G.UIT.C, config={align = "cm", minh = 0.7, minw = 0.9, padding = 0.1, r = 0.1, hover = true, colour =G.C.ORANGE, button = "sort_hand_value", shadow = true}, nodes={'
+position = "at"
+payload = '{n=G.UIT.C, config={align = "cm", minh = 0.8, minw = 1.3, padding = 0.1, r = 0.1, hover = true, colour =G.C.ORANGE, button = "sort_hand_value", shadow = true}, nodes={'
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '{n=G.UIT.C, config={align = "cm", minh = 0.7, minw = 0.9, padding = 0.1, r = 0.1, hover = true, colour =G.C.ORANGE, button = "sort_hand_suit", shadow = true}, nodes={'
+position = "at"
+payload = '{n=G.UIT.C, config={align = "cm", minh = 0.8, minw = 1.3, padding = 0.1, r = 0.1, hover = true, colour =G.C.ORANGE, button = "sort_hand_suit", shadow = true}, nodes={'
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "not run_info and {n=G.UIT.R, config={id = 'select_blind_button', align = \"cm\", ref_table = blind_choice.config, colour = disabled and G.C.UI.BACKGROUND_INACTIVE or G.C.ORANGE, minh = 0.6, minw = 2.7, padding = 0.07, r = 0.1, shadow = true, hover = true, one_press = true, button = 'select_blind'}, nodes={"
+position = "at"
+payload = "not run_info and {n=G.UIT.R, config={id = 'select_blind_button', align = \"cm\", ref_table = blind_choice.config, colour = disabled and G.C.UI.BACKGROUND_INACTIVE or G.C.ORANGE, minh = 1.2, minw = 2.7, padding = 0.07, r = 0.1, shadow = true, hover = true, one_press = true, button = 'select_blind'}, nodes={"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "{n=G.UIT.T, config={text = localize(blind_state, 'blind_states'), scale = 0.45, colour = G.C.UI.TEXT_LIGHT, shadow = true}}"
+position = "at"
+payload = "{n=G.UIT.T, config={text = localize(blind_state, 'blind_states'), scale = 0.65, colour = G.C.UI.TEXT_LIGHT, shadow = true}}"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "{n=G.UIT.C, config={align = \"cm\",r = 0.1, minw = 0.6*args.scale, hover = not disabled, colour = not disabled and args.colour or G.C.BLACK,shadow = not disabled, button = not disabled and 'option_cycle' or nil, ref_table = args, ref_value = 'l', focus_args = {type = 'none'}}, nodes={"
+position = "at"
+payload = "{n=G.UIT.C, config={align = \"cm\",r = 0.1, minw = 1.2*args.scale, hover = not disabled, colour = not disabled and args.colour or G.C.BLACK,shadow = not disabled, button = not disabled and 'option_cycle' or nil, ref_table = args, ref_value = 'l', focus_args = {type = 'none'}}, nodes={"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "{n=G.UIT.C, config={align = \"cm\",r = 0.1, minw = 0.6*args.scale, hover = not disabled, colour = not disabled and args.colour or G.C.BLACK,shadow = not disabled, button = not disabled and 'option_cycle' or nil, ref_table = args, ref_value = 'r', focus_args = {type = 'none'}}, nodes={"
+position = "at"
+payload = "{n=G.UIT.C, config={align = \"cm\",r = 0.1, minw = 1.2*args.scale, hover = not disabled, colour = not disabled and args.colour or G.C.BLACK,shadow = not disabled, button = not disabled and 'option_cycle' or nil, ref_table = args, ref_value = 'r', focus_args = {type = 'none'}}, nodes={"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''
+function create_keyboard_button(key, binding)
+  local key_label = (key == 'backspace' and 'Backspace') or (key == ' ' and 'Space') or (key == 'back' and 'Back') or (key == 'return' and 'Enter') or key
+  return UIBox_button{ label = {key_label}, button = "key_button", ref_table = {key = key == 'back' and 'return' or key},
+      minw = key == ' ' and 6 or key == 'return' and 2.5 or key == 'backspace' and 2.5 or key == 'back' and 2.5 or 0.8,
+      minh = key == 'return' and 1.5 or key == 'backspace' and 1.5 or key == 'back' and 0.8 or 0.7,
+      col = true, colour = G.C.GREY, focus_args = binding and {button = binding, orientation = (key == ' ' or key == 'back') and 'cr' or 'bm', set_button_pip= true} or nil}
+end
+'''
+position = "at"
+payload = '''
+function create_keyboard_button(key, binding)
+  local overall_scale = 1.9
+  local key_label = (key == 'backspace' and 'Backspace') or (key == ' ' and 'Space') or (key == 'back' and 'Back') or (key == 'return' and 'Enter') or key
+  return UIBox_button{ label = {key_label}, scale = overall_scale*0.5, button = "key_button", ref_table = {key = key == 'back' and 'return' or key},
+      minw = key == ' ' and overall_scale*6 or key == 'return' and overall_scale*2.5 or key == 'backspace' and overall_scale*2.5 or key == 'back' and overall_scale*2.5 or overall_scale*0.8,
+      minh = key == 'return' and 1.5 or key == 'backspace' and 1.5 or key == 'back' and 0.8 or overall_scale*0.7,
+      col = true, colour = G.C.GREY, focus_args = binding and {button = binding, orientation = (key == ' ' or key == 'back') and 'cr' or 'bm', set_button_pip= true} or nil}
+end'''
+match_indent = true
+times = 1
