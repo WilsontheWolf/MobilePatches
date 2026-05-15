@@ -1,0 +1,12 @@
+# Use generic sans serif font for better readability on mobile
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.regex]
+target = "game.lua"
+pattern = "font = 1,"
+position = "at"
+payload = "font = 8,"
+match_indent = true

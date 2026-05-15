@@ -12,4 +12,11 @@ payload = "highdpi = (love.system.getOS() == 'OS X' or love.system.getOS() == 'A
 match_indent = true
 times = 1
 
-
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "if love.system.getOS() == 'Windows' and false then --implement later if needed"
+position = "at"
+payload = "if true then"
+match_indent = true
+times = 1
